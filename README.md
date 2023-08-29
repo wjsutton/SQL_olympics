@@ -28,9 +28,37 @@ Before we write any SQL we're going to need a database. For this challenge we'll
 
 ## Part 2: Upload a dataset :inbox_tray:
 
-In this challenge we'll be working with data from the Summer Olympic Games, you can find the data here. <br>Originally sourced from: [Kaggle](https://www.kaggle.com/datasets/bhanupratapbiswas/olympic-data?select=dataset_olympics.csv)
+In this challenge we'll be working with data from the Summer Olympic Games, you can find the [data here](https://github.com/wjsutton/SQL_olympics/blob/main/olympics_data.csv). <br>Originally sourced from: [Kaggle](https://www.kaggle.com/datasets/bhanupratapbiswas/olympic-data?select=dataset_olympics.csv)
 
-To put our data on mySQL we will be uploading the raw values via an INSERT VALUES statement. i.e.
+### Key Steps
+
+#### 1. Create Your Database/Schema
+
+In mySQL there is no visual difference between a schema and a database.
+
+For the full path of a table you make be used to the convention of:
+- database.schema.table 
+
+but here you can use either:
+- database.table
+- schema.table
+
+Hint: Use the CREATE SCHEMA command to create a schema, or CREATE DATABASE for a database.
+
+```
+CREATE DATABASE olympics;
+-- Or use CREATE SCHEMA olympics;
+USE olympics;
+```
+Note the USE will set our path to be a given database or schema.
+
+#### 2. Create a Staging Table
+
+At this point we just want the data on our SQL Server, and we'll improve it later.
+
+Using details of our [data](https://github.com/wjsutton/SQL_olympics/blob/main/olympics_data.csv) create a table for this data to fit into.
+
+Hint: In your created database/schema use the CREATE TABLE command to build a table, e.g.
 
 ```
 CREATE TABLE mytable (
@@ -39,7 +67,16 @@ CREATE TABLE mytable (
   col3 VARCHAR(10),
   col4 VARCHAR(200)
 );
+```
+Note here the datatypes are import to label correctly identify numerical data vs text data, however the specific accuracy of the datatypes is less important, e.g. VARCHAR(255) vs VARCHAR(50) - we will fix this later. 
 
+Tools like  [konbert.com/convert/csv/to/sql](https://konbert.com/convert/csv/to/sql?) can help you structure this create table statement.
+
+#### 3. Insert Data
+
+To put our data on mySQL we will be uploading the raw values via an INSERT VALUES statement. i.e.
+
+```
 INSERT INTO mytable VALUES
 (1,2,'a','b'),
 (....)
@@ -47,17 +84,19 @@ INSERT INTO mytable VALUES
 
 To get the data into this type of format, you can use a tool that converts CSV to SQL, personally I recommend [konbert.com/convert/csv/to/sql](https://konbert.com/convert/csv/to/sql?) due to the file size of this challenge.
 
-For this section we're just looking to upload the data, we will configure the datatypes in the next section. 
-
 ### Deliverable
 
-
+1. A database or schema containing a table with the [data found here](https://github.com/wjsutton/SQL_olympics/blob/main/olympics_data.csv)
 
 ### My Solution
 
-
+- Create Database
+- Create Staging Table
+- Insert Data
 
 ## Part 3: Optimise the data :chart_with_upwards_trend:
+
+Looking at our data, it can be stored in a more efficient way. In this section we'll look to take data from our staging table from part 2 and convert it to smaller tables on specific themes. Doing this will reduce storage costs, increase query performance and reduce any bottleneck from querying a single table.   
 
 ### Key Steps
 
