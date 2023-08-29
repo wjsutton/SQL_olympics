@@ -90,31 +90,47 @@ To get the data into this type of format, you can use a tool that converts CSV t
 
 ### My Solution
 
-- Create Database
-- Create Staging Table
-- Insert Data
+- [Create Database and Staging Table](https://raw.githubusercontent.com/wjsutton/SQL_olympics/main/sql/create_database.sql)
+- [Insert Data](https://raw.githubusercontent.com/wjsutton/SQL_olympics/main/sql/insert_raw_data.sql)
 
 ## Part 3: Optimise the data :chart_with_upwards_trend:
 
-Looking at our data, it can be stored in a more efficient way. In this section we'll look to take data from our staging table from part 2 and convert it to smaller tables on specific themes. Doing this will reduce storage costs, increase query performance and reduce any bottleneck from querying a single table.   
+Looking at our data, it can be stored in a more efficient way. In this section we'll look to take data from our staging table from part 2 and convert it to smaller tables on specific themes. 
+
+Doing this will reduce storage costs, increase query performance and reduce any bottleneck from querying a single table.   
 
 ### Key Steps
 
-#### 1. Create Your Database/Schema:
+#### 1. Plan Your Tables
 
-#### 2. Create Your Tables:
+Looking at the data there are a few common themes we can see:
+- Details about the athletes, their ages, height, weight
+- Details about the teams, the NOC and region
+- Details about the games, when and where the games were held
+- Details about the results, the event, the competitors and the medals
 
-#### 3. Insert Data:
+For this dataset we'll look to implement a Star Schema design with:
+- Our Fact Table: results
+- Our Dimension Tables: athletes, teams, games
+- More details on Star Schemas https://learn.microsoft.com/en-us/power-bi/guidance/star-schema
 
-#### 4. Set Primary and Foreign Keys:
+#### 2. Create Your Tables
 
-#### 5. Set Indexes:
+
+
+#### 3. Insert Data
+
+#### 4. Set Primary and Foreign Keys
+
+#### 5. Set Indexes
 
 ### Deliverable
 
 
 
 ### My Solution
+
+Of note, Database/Schema design does have a reasonable amount of subjectivity to it, the solution I have will improve upon having just one table but there may be a more optimised solution depending on how your data will be used. 
 
 ## Part 4: Analysis and visulisation :chart_with_upwards_trend:
 
