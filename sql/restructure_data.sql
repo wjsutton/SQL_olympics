@@ -1,6 +1,20 @@
+-- Set database path
 USE olympics; 
 
+-- This removes the error of dropping a table with a foreign key
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Remove tables if they already exist
 DROP TABLE IF EXISTS athletes;
+DROP TABLE IF EXISTS teams;
+DROP TABLE IF EXISTS games;
+DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS results;
+
+-- This enables the error of dropping a table with a foreign key
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Create tables and insert data
 CREATE TABLE athletes  (
   athlete_id INT,
   name VARCHAR(100),
@@ -17,7 +31,7 @@ NULLIF(height,'') as height,
 NULLIF(weight,'') as weight
 FROM olympics.staging;
 
-DROP TABLE IF EXISTS teams;
+
 CREATE TABLE teams (
   team_id INT,
   team VARCHAR(50),
@@ -41,7 +55,7 @@ FROM (
 	FROM staging
 ) as teams;
 
-DROP TABLE IF EXISTS games;
+
 CREATE TABLE games (
   games_id INT,
   year INT,
@@ -65,7 +79,7 @@ FROM (
 	FROM staging
 ) as games;
 
-DROP TABLE IF EXISTS events;
+
 CREATE TABLE events (
   event_id INT,
   event VARCHAR(100),
@@ -83,7 +97,7 @@ FROM (
 	FROM staging
 ) as events;
 
-DROP TABLE IF EXISTS results;
+
 CREATE TABLE results (
   athlete_id INT,
   athlete_age INT,
@@ -105,11 +119,14 @@ INNER JOIN teams as T on T.team = S.team
 INNER JOIN games as G on G.games = S.games AND G.year = S.year AND G.season = S.season
 INNER JOIN events as E on E.event = S.event AND E.sport = S.sport;
 
+
+-- Set Primary Keys
 ALTER TABLE athletes ADD PRIMARY KEY(athlete_id);
 ALTER TABLE teams ADD PRIMARY KEY(team_id);
 ALTER TABLE games ADD PRIMARY KEY(games_id);
 ALTER TABLE events ADD PRIMARY KEY(event_id);
 
+-- Set Foreign Keys
 ALTER TABLE results ADD FOREIGN KEY (athlete_id) REFERENCES athletes(athlete_id);
 ALTER TABLE results ADD FOREIGN KEY (team_id) REFERENCES teams(team_id);
 ALTER TABLE results ADD FOREIGN KEY (games_id) REFERENCES games(games_id);
