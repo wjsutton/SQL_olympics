@@ -28,9 +28,37 @@ Before we write any SQL we're going to need a database. For this challenge we'll
 
 ## Part 2: Upload a dataset :inbox_tray:
 
-In this challenge we'll be working with data from the Summer Olympic Games, you can find the data here. <br>Originally sourced from: [Kaggle](https://www.kaggle.com/datasets/bhanupratapbiswas/olympic-data?select=dataset_olympics.csv)
+In this challenge we'll be working with data from the Summer Olympic Games, you can find the [data here](https://github.com/wjsutton/SQL_olympics/blob/main/olympics_data.csv). <br>Originally sourced from: [Kaggle](https://www.kaggle.com/datasets/bhanupratapbiswas/olympic-data?select=dataset_olympics.csv)
 
-To put our data on mySQL we will be uploading the raw values via an INSERT VALUES statement. i.e.
+### Key Steps
+
+#### 1. Create Your Database/Schema
+
+In mySQL there is no visual difference between a schema and a database.
+
+For the full path of a table you make be used to the convention of:
+- database.schema.table 
+
+but here you can use either:
+- database.table
+- schema.table
+
+Hint: Use the CREATE SCHEMA command to create a schema, or CREATE DATABASE for a database.
+
+```
+CREATE DATABASE olympics;
+-- Or use CREATE SCHEMA olympics;
+USE olympics;
+```
+Note the USE will set our path to be a given database or schema.
+
+#### 2. Create a Staging Table
+
+At this point we just want the data on our SQL Server, and we'll improve it later.
+
+Using details of our [data](https://github.com/wjsutton/SQL_olympics/blob/main/olympics_data.csv) create a table for this data to fit into.
+
+Hint: In your created database/schema use the CREATE TABLE command to build a table, e.g.
 
 ```
 CREATE TABLE mytable (
@@ -39,7 +67,16 @@ CREATE TABLE mytable (
   col3 VARCHAR(10),
   col4 VARCHAR(200)
 );
+```
+Note here the datatypes are import to label correctly identify numerical data vs text data, however the specific accuracy of the datatypes is less important, e.g. VARCHAR(255) vs VARCHAR(50) - we will fix this later. 
 
+Tools like  [konbert.com/convert/csv/to/sql](https://konbert.com/convert/csv/to/sql?) can help you structure this create table statement.
+
+#### 3. Insert Data
+
+To put our data on mySQL we will be uploading the raw values via an INSERT VALUES statement. i.e.
+
+```
 INSERT INTO mytable VALUES
 (1,2,'a','b'),
 (....)
@@ -47,35 +84,223 @@ INSERT INTO mytable VALUES
 
 To get the data into this type of format, you can use a tool that converts CSV to SQL, personally I recommend [konbert.com/convert/csv/to/sql](https://konbert.com/convert/csv/to/sql?) due to the file size of this challenge.
 
-For this section we're just looking to upload the data, we will configure the datatypes in the next section. 
-
 ### Deliverable
 
-
+1. A database or schema containing a table with the [data found here](https://github.com/wjsutton/SQL_olympics/blob/main/olympics_data.csv)
 
 ### My Solution
 
-
+- [Create Database and Staging Table](https://raw.githubusercontent.com/wjsutton/SQL_olympics/main/sql/create_database.sql)
+- [Insert Data](https://raw.githubusercontent.com/wjsutton/SQL_olympics/main/sql/insert_raw_data.sql)
 
 ## Part 3: Optimise the data :chart_with_upwards_trend:
 
+Looking at our data, it can be stored in a more efficient way. In this section we'll look to take data from our staging table from part 2 and convert it to smaller tables on specific themes. 
+
+Doing this will reduce storage costs, increase query performance and reduce any bottleneck from querying a single table.   
+
 ### Key Steps
 
-#### 1. Create Your Database/Schema:
+#### 1. Plan Your Tables
 
-#### 2. Create Your Tables:
+Looking at the data there are a few common themes we can see:
+- Details about the athletes, their ages, height, weight
+- Details about the teams, the NOC and region
+- Details about the games, when and where the games were held
+- Details about the results, the event, the competitors and the medals
 
-#### 3. Insert Data:
+For this dataset we'll look to implement a Star Schema design with:
+- Our Fact Table: results
+- Our Dimension Tables: athletes, teams, games
+- More details on Star Schemas https://learn.microsoft.com/en-us/power-bi/guidance/star-schema
 
-#### 4. Set Primary and Foreign Keys:
+#### 2. Deciding on Columns
 
-#### 5. Set Indexes:
+When restructuring your table the goal is to make every row unique for that id.
+
+For example for our athletes, we don't want the same athlete appearing multiple times as this we cause problems when we join tables together.
+
+Start with SELECT DISTINCT and build in additional columns, e.g. Here I'm seeing if each athlete has a unique name
+
+```
+SELECT DISTINCT
+id,
+name
+FROM staging;
+```
+
+And we can varify this with a COUNT and HAVING clause:
+
+```
+SELECT
+id,
+COUNT(DISTINCT name) as names
+FROM staging
+GROUP BY id
+HAVING COUNT(DISTINCT name)>1;
+```
+Which returns zero results, meaning there are now ids with different names. 
+
+However if we carry on further to ages, we'll see we have multiple for athletes.
+
+```
+SELECT
+id,
+name,
+sex, 
+COUNT(DISTINCT age) as ages
+FROM staging
+GROUP BY id, name,
+sex
+HAVING COUNT(DISTINCT age)>1;
+```
+
+Rather than store the athlete's age at the point of the competition which will change, we could instead store their year of birth and we can recalculate their age using the year of the games.
+
+However this still returns multiple values, as the date of the games happens at different times of the year, in this case I will leave the age of the competitor in the fact table as it varies by competitor and year of the games. 
+
+#### 3. Creating ID Columns
+
+Id columns are regularly used with each table in SQL as they are easy for SQL to join on and take up less storage space than text objects.
+
+In mySQL we can find the data required for the teams dimension table using 
+
+```
+SELECT DISTINCT 
+team,
+noc,
+noc_region,
+NOC_notes
+FROM staging
+```
+However there's no ID field, meaning we'd have to join on the team name. 
+
+That is unless we create a column to be our ID, for this we'll use the ROW_NUMBER() function. 
+
+However if you add ROW_NUMBER() to this query you'll find we have the same data repeated multiple times with different IDs
+
+```
+SELECT DISTINCT 
+ROW_NUMBER() OVER(ORDER BY team) as team_id,
+team,
+noc,
+noc_region,
+NOC_notes
+FROM staging
+```
+
+What we need to to run our SELECT DISTINCT to find the data we need, then give it an ID. Typically you could do this using a Common Table Expression (CTE) or a Subquery, in this case I will use a Subquery as historically mySQL cannot run CTEs, however they now can as of version 8, you can check your version by running `SELECT version();`
+
+Rewriting my query using a Subquery
+
+```
+SELECT 
+ROW_NUMBER() OVER(ORDER BY team) as team_id,
+team,
+noc,
+noc_region,
+NOC_notes
+FROM (
+	SELECT DISTINCT 
+	team,
+	noc,
+	noc_region,
+	NOC_notes
+	FROM staging
+) as teams;
+```
+
+#### 4. Create Tables and Insert Data
+
+Based on the above we need to create the tables:
+- results (Fact table)
+- athletes (Dimension table)
+- teams (Dimension table)
+- games (Dimension table)
+- events (Dimension table)
+
+As before we can use the CREATE TABLE command to build a table, e.g.
+
+```
+CREATE TABLE mytable (
+  col1 INT,
+  col2 INT,
+  col3 VARCHAR(10),
+  col4 VARCHAR(200)
+);
+```
+And we can check column sizes using:
+
+```
+SELECT
+MAX(LENGTH(name)),
+MAX(LENGTH(sex)),
+MAX(LENGTH(team)),
+MAX(LENGTH(noc)),
+MAX(LENGTH(noc_region)),
+MAX(LENGTH(NOC_notes)),
+MAX(LENGTH(event)),
+MAX(LENGTH(city)),
+MAX(LENGTH(season)),
+MAX(LENGTH(sport)),
+MAX(LENGTH(games)),
+MAX(LENGTH(medal))
+FROM olympics.staging;
+```
+
+All IDs should be stored as INT.
+
+
+#### 5. Set Primary and Foreign Keys
+
+Each of your dimension tables should be set to have a Primary Key.
+The results table will contain Foreign Keys from your dimension tables.
+
+For example,
+
+```
+-- Add primary key
+ALTER TABLE athletes ADD PRIMARY KEY(athlete_id);
+
+-- Add foreign key
+ALTER TABLE results ADD FOREIGN KEY (athlete_id) REFERENCES athletes(athlete_id);
+```
+
+#### 6. Create ER Diagram:
+Once your tables are built, populated, and linked, download and use [DBeaver](https://dbeaver.io/) to create an ER diagram to visualize the relationships between your tables.
+
+**Key Steps**
+- Download [DBeaver](https://dbeaver.io/)
+- Create connection > SQL > MySQL (Version 8+)
+- Server Host: localhost
+- Port: 3306
+- Username: root
+- Password: your database password
+- Finish
+
+You should see your database and the tables within it. 
+
+Select each table > right click > Create New ER Diagram
 
 ### Deliverable
 
-
+At the end of this section, you should have:
+- a collection of tables in a mySQL database/schema with tables populated with Olympics data.
+- a SQL script creating your taking data from your staging table, creating tables, inserting data and creating primary and foreign keys
+- a DBeaver ER diagram showing the relationships between your tables
 
 ### My Solution
+
+Here is my solution if you get stuck
+- [SQL - Create Database and Staging Table](sql/create_database.sql)
+- [SQL - Insert data into Staging Table](sql/insert_raw_data.sql)
+- [SQL - Check Column Sizes](sql/check_column_size.sql)
+- [SQL - Create New Tables and Keys](sql/restructure_data.sql)
+- [ER Diagram](olympic_erd.png)
+
+### My Solution
+
+Of note, Database/Schema design does have a reasonable amount of subjectivity to it, the solution I have will improve upon having just one table but there may be a more optimised solution depending on how your data will be used. 
 
 ## Part 4: Analysis and visulisation :chart_with_upwards_trend:
 
