@@ -1,7 +1,7 @@
 CREATE DATABASE olympics;
 USE olympics;
 
-CREATE TABLE `results` (
+CREATE TABLE `staging` (
   `ID` BIGINT,
   `Name` VARCHAR(1024),
   `Sex` VARCHAR(1024),

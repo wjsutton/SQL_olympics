@@ -11,4 +11,4 @@ MAX(LENGTH(season)),
 MAX(LENGTH(sport)),
 MAX(LENGTH(games)),
 MAX(LENGTH(medal))
-FROM olympics.results;
+FROM olympics.staging;
