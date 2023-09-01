@@ -217,6 +217,7 @@ Based on the above we need to create the tables:
 - athletes (Dimension table)
 - teams (Dimension table)
 - games (Dimension table)
+- events (Dimension table)
 
 As before we can use the CREATE TABLE command to build a table, e.g.
 
@@ -250,12 +251,52 @@ FROM olympics.staging;
 All IDs should be stored as INT.
 
 
+#### 5. Set Primary and Foreign Keys
 
-#### 5. Set Primary and Foreign Keys, and Indexes
+Each of your dimension tables should be set to have a Primary Key.
+The results table will contain Foreign Keys from your dimension tables.
+
+For example,
+
+```
+-- Add primary key
+ALTER TABLE athletes ADD PRIMARY KEY(athlete_id);
+
+-- Add foreign key
+ALTER TABLE results ADD FOREIGN KEY (athlete_id) REFERENCES athletes(athlete_id);
+```
+
+#### 6. Create ER Diagram:
+Once your tables are built, populated, and linked, download and use [DBeaver](https://dbeaver.io/) to create an ER diagram to visualize the relationships between your tables.
+
+**Key Steps**
+- Download [DBeaver](https://dbeaver.io/)
+- Create connection > SQL > MySQL (Version 8+)
+- Server Host: localhost
+- Port: 3306
+- Username: root
+- Password: your database password
+- Finish
+
+You should see your database and the tables within it. 
+
+Select each table > right click > Create New ER Diagram
 
 ### Deliverable
 
+At the end of this section, you should have:
+- a collection of tables in a mySQL database/schema with tables populated with Olympics data.
+- a SQL script creating your taking data from your staging table, creating tables, inserting data and creating primary and foreign keys
+- a DBeaver ER diagram showing the relationships between your tables
 
+### My Solution
+
+Here is my solution if you get stuck
+- [SQL - Create Database and Staging Table](sql/create_database.sql)
+- [SQL - Insert data into Staging Table](sql/insert_raw_data.sql)
+- [SQL - Check Column Sizes](sql/check_column_size.sql)
+- [SQL - Create New Tables and Keys](sql/restructure_data.sql)
+- [ER Diagram](olympic_erd.png)
 
 ### My Solution
 
