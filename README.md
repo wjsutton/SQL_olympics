@@ -280,6 +280,8 @@ Once your tables are built, populated, and linked, download and use [DBeaver](ht
 
 You should see your database and the tables within it. 
 
+![](create_new_erd.png)
+
 Select each table > right click > Create New ER Diagram
 
 ![](olympic_erd.png)
