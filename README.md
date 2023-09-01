@@ -298,32 +298,62 @@ Here is my solution if you get stuck
 - [SQL - Create New Tables and Keys](sql/restructure_data.sql)
 - [ER Diagram](olympic_erd.png)
 
-### My Solution
-
 Of note, Database/Schema design does have a reasonable amount of subjectivity to it, the solution I have will improve upon having just one table but there may be a more optimised solution depending on how your data will be used. 
 
 ## Part 4: Analysis and visulisation :chart_with_upwards_trend:
 
+Now we have our data prepared it's time to run some analysis. You could look at:
+- The rise and fall of nations in the medal league tables 
+- Do physical attributes (height, weight) matter for medals? In weight sports does height/weight matter? 
+- Home advantage, if your city hosts the Olympic Games is your nation more likely to outperform in the medal tables?
+
+If want to stick to a tutorial you can follow my project, recreating my Running for [Olympic Gold viz](https://public.tableau.com/app/profile/wjsutton/viz/RunningforOlympicGold/RunningforOlympicGold). 
+
+<img src="https://public.tableau.com/views/RunningforOlympicGold/RunningforOlympicGold.png?%3Adisplay_static_image=y&:showVizHome=n" width="70%">
+
 ### Key Steps
 
-#### 1. 
-#### 2. 
-#### 3. 
+#### 1. Query the new schema
 
-#### 4. Download your data and save it locally as a csv.
+For this output we'll need:
+- all gold medalists
+- columns for region, year, event, sport, gender
+- one row for each medal result (note team sports have multiple medals, we'll count those as 1 medal)
 
+For this viz I'd filtered to running events, but you could pick a sport you're interested in, or leave that up to the user via a filter.
+
+#### 2. Save the result as a table
+
+As before we can use the create table command
+```
+CREATE TABLE my_viz AS
+SELECT DISTINCT
 ...
+FROM results as r
+...
+```
+
+#### 3. Connect your data to Tableau Desktop or download the result as a csv for Tableau Public
+
+On Tableau Desktp you may need to download an additional driver but will be able to connect with the same details as used for DBeaver.
+
+#### 4. Add Continent lookup
+
+The csv file here [Countries-Continents.csv](https://github.com/dbouquin/IS_608/blob/master/NanosatDB_munging/Countries-Continents.csv) will allow you to join country names to continents for the color scheme
+
+#### 5. Design the dashboard
+
+For this viz I've built a rectangluar view, however you may want to try something more adventurous like [Olympic feathers by Nadieh Bremer](https://www.visualcinnamon.com/portfolio/olympic-feathers/) you can try the [Radial Heatmap Generator](https://github.com/wjsutton/radial_heatmap_generator) I've built. Do give Nadieh Bremer reference as "recreated from Nadieh Bremer's Olympic feathers.
+
+<img src="https://public.tableau.com/app/profile/wjsutton/viz/ContinentalAdvantageattheSummerOlympicsSportsVizSunday/TheSummerOlympics" width="70%">
+
+Save your viz to Tableau Public and share it with #SportsVizSunday
 
 ### My Solution
-Here is my solution if you get stuck
+Here is my solution if you get stuck:
+- SQL Script: [Create Results Table](sql/create_results_table.sql)
+- Downloadable Tableau Dashboard: [Olympic Gold viz](https://public.tableau.com/app/profile/wjsutton/viz/RunningforOlympicGold/RunningforOlympicGold)
 ...
-
-Add titles and interactions to the visualisation. 
-
-Save the results as a Tableau dashboard. 
-Record a screenshot of the visualisation.
-
-You can add this to your Tableau Public portfolio by replacing the datasource with the csvfrom part 2, opening the .twbx file in Tableau Public and saving the workbook.
 
 ## Part 5: Record the project on GitHub :white_check_mark:
 
