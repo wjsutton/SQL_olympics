@@ -345,7 +345,7 @@ The csv file here [Countries-Continents.csv](https://github.com/dbouquin/IS_608/
 
 For this viz I've built a rectangluar view, however you may want to try something more adventurous like [Olympic feathers by Nadieh Bremer](https://www.visualcinnamon.com/portfolio/olympic-feathers/) you can try the [Radial Heatmap Generator](https://github.com/wjsutton/radial_heatmap_generator) I've built. Do give Nadieh Bremer reference as "recreated from Nadieh Bremer's Olympic feathers.
 
-<img src="https://public.tableau.com/app/profile/wjsutton/viz/ContinentalAdvantageattheSummerOlympicsSportsVizSunday/TheSummerOlympics" width="70%">
+<img src="https://public.tableau.com/views/ContinentalAdvantageattheSummerOlympicsSportsVizSunday/TheSummerOlympics.png?%3Adisplay_static_image=y&:showVizHome=n" width="70%">
 
 Save your viz to Tableau Public and share it with #SportsVizSunday
 
@@ -353,7 +353,6 @@ Save your viz to Tableau Public and share it with #SportsVizSunday
 Here is my solution if you get stuck:
 - SQL Script: [Create Results Table](sql/create_results_table.sql)
 - Downloadable Tableau Dashboard: [Olympic Gold viz](https://public.tableau.com/app/profile/wjsutton/viz/RunningforOlympicGold/RunningforOlympicGold)
-...
 
 ## Part 5: Record the project on GitHub :white_check_mark:
 
