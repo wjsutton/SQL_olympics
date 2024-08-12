@@ -3,12 +3,14 @@ A SQL Portfolio challenge, set up a database, upload and optimise a dataset, ana
 
 <img src='https://images.unsplash.com/photo-1708113823431-dd51b601bb87?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' width="70%">
 
+Source: [Sean McCammon Unslpash](https://unsplash.com/photos/a-monument-with-a-large-metal-olympic-symbol-on-top-of-it-X7KGE-scUXo)
+
 ## Task Overview
-- [Part 1: Setup a mySQL database :inbox_tray:]( )
-- [Part 2: Upload a dataset :crystal_ball:]( )
-- [Part 3: Optimise the data :chart_with_upwards_trend:]( )
-- [Part 4: Analysis and visualisation :chart_with_upwards_trend:]( )
-- [Part 5: Record the project on GitHub :white_check_mark:]( )
+- [Part 1: Setup a mySQL database :inbox_tray:](https://github.com/wjsutton/SQL_olympics/edit/main/README.md#part-1-setup-a-mysql-database-inbox_tray)
+- [Part 2: Upload a dataset :crystal_ball:](https://github.com/wjsutton/SQL_olympics/edit/main/README.md#part-2-upload-a-dataset-inbox_tray)
+- [Part 3: Optimise the data :chart_with_upwards_trend:](https://github.com/wjsutton/SQL_olympics/edit/main/README.md#part-3-optimise-the-data-chart_with_upwards_trend)
+- [Part 4: Analysis and visualisation :chart_with_upwards_trend:](https://github.com/wjsutton/SQL_olympics/edit/main/README.md#part-4-analysis-and-visualisation-chart_with_upwards_trend)
+- [Part 5: Record the project on GitHub :white_check_mark:](https://github.com/wjsutton/SQL_olympics/edit/main/README.md#part-5-record-the-project-on-github-white_check_mark)
 
 
 ## Part 1: Setup a mySQL database :inbox_tray:
