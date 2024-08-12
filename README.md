@@ -1,7 +1,7 @@
 # Olympic SQL Challenge
 A SQL Portfolio challenge, set up a database, upload and optimise a dataset, analyse and create a visualisation. 
 
-<img src='https://images.unsplash.com/photo-1569517282132-25d22f4573e6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80' width="70%">
+<img src='https://images.unsplash.com/photo-1708113823431-dd51b601bb87?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' width="70%">
 
 ## Task Overview
 - [Part 1: Setup a mySQL database :inbox_tray:]( )
